@@ -1,0 +1,38 @@
+```text
+# Core SDN/ML dependencies
+ryu>=4.34
+mininet>=2.3.1
+scikit-learn>=1.2.0
+pandas>=1.5.0
+numpy>=1.23.0
+matplotlib>=3.6.0
+
+# Data processing
+scipy>=1.9.0
+
+# HTML report generation
+jinja2>=3.1.0
+
+# Additional utilities
+seaborn>=0.12.0  # For better visualizations
+joblib>=1.2.0    # For model persistence
+```
+
+This `requirements.txt` covers all the key dependencies mentioned in your project report:
+
+ryu: SDN controller
+mininet: Network emulation (CLI usage)
+scikit-learn: ML pipeline (DT, SVM, EFDT, metrics)
+pandas/numpy: CSV processing and feature extraction
+matplotlib/seaborn: Plotting and HTML report charts
+jinja2: HTML template rendering for reports
+scipy/joblib: Additional ML utilities
+
+To install:
+
+```bash
+pip install -r requirements.txt
+```
+
+Note: Mininet and Open vSwitch require sudo apt install on Ubuntu rather than pip, so they're listed in Prerequisites instead.
+​
