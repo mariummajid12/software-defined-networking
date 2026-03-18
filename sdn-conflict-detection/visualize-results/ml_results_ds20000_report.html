@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SDN Conflict Detection - ML Results</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 20px 0;
+        }
+        .best-result {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        .best-result h3 {
+            margin: 0;
+            font-size: 24px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        tr:hover {
+            background: #e8f4f8;
+        }
+        .highlight {
+            background: #d4edda !important;
+            font-weight: bold;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SDN Conflict Detection Using Machine Learning</h1>
+        <p class="subtitle">Performance Analysis Report | Dataset: ml_results_ds20000.json</p>
+        
+        <div class="best-result">
+            <h3>🏆 Best Performing Algorithm</h3>
+            <p style="font-size: 20px; margin: 10px 0;">EFDT with 99.65% Accuracy</p>
+        </div>
+        
+        <h2>1. Algorithm Performance Comparison</h2>
+        <table>
+            <tr>
+                <th>Algorithm</th>
+                <th>Accuracy (%)</th>
+                <th>Precision (%)</th>
+                <th>Recall (%)</th>
+                <th>F1-Score (%)</th>
+                <th>Time (ms)</th>
+            </tr>
+            <tr >
+                <td><strong>Decision Tree</strong></td>
+                <td>99.57</td>
+                <td>99.59</td>
+                <td>99.51</td>
+                <td>99.55</td>
+                <td>19.5956</td>
+            </tr>
+            <tr >
+                <td><strong>SVM</strong></td>
+                <td>80.89</td>
+                <td>100.00</td>
+                <td>60.11</td>
+                <td>75.08</td>
+                <td>3505.5816</td>
+            </tr>
+            <tr class="highlight">
+                <td><strong>EFDT</strong></td>
+                <td>99.65</td>
+                <td>99.59</td>
+                <td>99.69</td>
+                <td>99.64</td>
+                <td>16.1595</td>
+            </tr>
+            <tr >
+                <td><strong>Hybrid DT-SVM</strong></td>
+                <td>80.86</td>
+                <td>100.00</td>
+                <td>60.06</td>
+                <td>75.04</td>
+                <td>12430.3954</td>
+            </tr>
+        </table>
+        
+        <h2>2. Detection Accuracy Comparison</h2>
+        <div class="chart-container">
+            <canvas id="accuracyChart"></canvas>
+        </div>
+        
+        <h2>3. Complete Metrics Comparison</h2>
+        <div class="chart-container">
+            <canvas id="metricsChart"></canvas>
+        </div>
+        
+        <div class="grid">
+            <div>
+                <h2>4. Execution Time</h2>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="timeChart"></canvas>
+                </div>
+            </div>
+            <div>
+                <h2>5. F1-Score Comparison</h2>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="f1Chart"></canvas>
+                </div>
+            </div>
+        </div>
+        <h2>6. Conflict Type Classification (7-Class)</h2>
+        <table>
+            <tr>
+                <th>Metric</th>
+                <th>Value (%)</th>
+            </tr>
+            <tr><td>Accuracy</td><td>59.90</td></tr>
+            <tr><td>Precision</td><td>61.21</td></tr>
+            <tr><td>Recall</td><td>59.90</td></tr>
+            <tr><td>F1-Score</td><td>59.02</td></tr>
+        </table>
+    </div>
+    
+    <script>
+        const labels = ['Decision Tree', 'SVM', 'EFDT', 'Hybrid DT-SVM'];
+        const colors = ['#3498db', '#e74c3c', '#2ecc71', '#f39c12'];
+        
+        // Accuracy Chart
+        new Chart(document.getElementById('accuracyChart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Accuracy (%)',
+                    data: [99.56591839265782, 80.88800694530572, 99.65273471412625, 80.86320228202902],
+                    backgroundColor: colors,
+                    borderWidth: 2,
+                    borderColor: colors.map(c => c)
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: 'Detection Accuracy by Algorithm', font: { size: 16 } }
+                },
+                scales: {
+                    y: { beginAtZero: false, min: 70, max: 105, title: { display: true, text: 'Accuracy (%)' } }
+                }
+            }
+        });
+        
+        // Metrics Comparison Chart
+        new Chart(document.getElementById('metricsChart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    { label: 'Accuracy', data: [99.56591839265782, 80.88800694530572, 99.65273471412625, 80.86320228202902], backgroundColor: '#3498db' },
+                    { label: 'Precision', data: [99.58549222797927, 100.0, 99.58624256529609, 100.0], backgroundColor: '#2ecc71' },
+                    { label: 'Recall', data: [99.50815428423505, 60.10872378980068, 99.68936060056951, 60.05695055656226], backgroundColor: '#e74c3c' },
+                    { label: 'F1-Score', data: [99.54680823514178, 75.08488278092157, 99.63777490297542, 75.04447679120169], backgroundColor: '#f39c12' }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'All Metrics Comparison', font: { size: 16 } }
+                },
+                scales: {
+                    y: { beginAtZero: false, min: 50, max: 105, title: { display: true, text: 'Percentage (%)' } }
+                }
+            }
+        });
+        
+        // Execution Time Chart
+        new Chart(document.getElementById('timeChart'), {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: [19.595623016357422, 3505.5816173553467, 16.159534454345703, 12430.395364761353],
+                    backgroundColor: colors
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'Execution Time Distribution', font: { size: 14 } }
+                }
+            }
+        });
+        
+        // F1-Score Chart
+        new Chart(document.getElementById('f1Chart'), {
+            type: 'polarArea',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: [99.54680823514178, 75.08488278092157, 99.63777490297542, 75.04447679120169],
+                    backgroundColor: colors.map(c => c + '99')
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'F1-Score Distribution', font: { size: 14 } }
+                },
+                scales: {
+                    r: { min: 50, max: 100 }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
